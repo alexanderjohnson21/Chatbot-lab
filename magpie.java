@@ -28,6 +28,40 @@ public class magpie
         return response;
     }
 
+    private int findKeyword(String statement, String goal, int startPos){
+
+        String sentence = statement.trim();
+        int hello = sentence.toLowerCase().indexOf(goal.toLowerCase(), startPos);
+            while(hello >= 0){
+
+                String before = " ", after = " ";
+
+                if (hello>0)
+                {
+                    before = sentence.substring(hello -1, hello).toLowerCase();
+                }
+                if (hello+ goal.length() < sentence.length()){
+                    after = sentence.substring(hello +goal.length(), hello + goal.length() + 1).toLowerCase();
+                }
+                if (((before.compareTo("a") < 0)
+                || (before.compareTo("z") > 0)) 
+                 && ((after.compareTo("a") < 0)
+                || (after.compareTo("z") > 0)))
+
+                {
+                    return hello;
+                }
+
+                hello = sentence.indexOf(goal.toLowerCase()+ hello+1);
+
+            }
+
+            return -1;
+
+        }
+
+
+
     private String getARandomResponse()
     {
         
@@ -80,5 +114,7 @@ public class magpie
         System.out.println(maggie.getResponse("The weather is nice."));
         System.out.println(">Have you heard of my friend?");
         System.out.println(maggie.getResponse("Have you heard of my friend?"));
+
+        maggie.findKeyword("The weather is really great today!", "great", 0);
     }
 }
