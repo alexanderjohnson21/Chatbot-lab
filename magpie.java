@@ -21,16 +21,71 @@ public class magpie
         {
             response = "Tell me about the dynamics of your family.";
         }
+        else if (findKeyword(statement, "I like", 0) >= 0)
+        {
+            response = iLikeStatement(statement);
+        }
+        else if (findKeyword(statement, "I want", 0) >=0){
+            response = iWantStatement(statement);
+
+        }
+
+        else
+        {
+            int hello = findKeyword(statement, "you", 0);
+
+            if (hello >= 0 && findKeyword(statement, "me", hello) >= 0)
+            {
+                response = personalStatement(statement);}
         else
         {
             response = getARandomResponse();
         }
+        }
         return response;
     }
 
-    private int findKeyword(String statement, String goal, int startPos){
+    private String iLikeStatement(String statement)
+    {
+        statement = statement.trim();
+        String lastChar = statement.substring(statement.length() - 1);
+        if (lastChar.equals("."))
+        {
+            statement = statement.substring(0, statement.length() - 1);
+        }
+        int hello = findKeyword(statement, "I like", 0);
+        String restOfStatement = statement.substring(hello + 6).trim();
+        return ("How much do you like " + restOfStatement + "?");
+    }
 
-        String sentence = statement.trim();
+    private String personalStatement(String statement)
+    {
+        statement = statement.trim();
+        String lastChar = statement.substring(statement.length() - 1);
+        if (lastChar.equals("."))
+        {
+            statement = statement.substring(0, statement.length() - 1);
+        }
+        int hello = findKeyword(statement, "You", 0);
+        String restOfStatement = statement.substring( hello + 3,12).trim();
+        return ("How much do I " + restOfStatement + " you?");
+    }
+
+    private String iWantStatement(String statement)
+    {
+        statement = statement.trim();
+        String lastChar = statement.substring(statement.length() - 1);
+        if (lastChar.equals("."))
+        {
+            statement = statement.substring(0, statement.length() - 1);
+        }
+        int hello = findKeyword(statement, "I want", 0);
+        String restOfStatement = statement.substring(hello + 6).trim();
+        return ("How much do you want " + restOfStatement + "?");}
+
+    private int findKeyword(String statement, String goal, int startPos) {
+    
+         String sentence = statement.trim();
         int hello = sentence.toLowerCase().indexOf(goal.toLowerCase(), startPos);
             while(hello >= 0){
 
@@ -53,15 +108,16 @@ public class magpie
                 }
 
                 hello = sentence.indexOf(goal.toLowerCase()+ hello+1);
-
+                
             }
 
-            return -1;
-
+          return hello;
         }
-
-
-
+   
+        private int findKeyword(String statement, String goal)
+        {
+            return findKeyword(statement, goal, 0);
+        }
     private String getARandomResponse()
     {
         
@@ -114,7 +170,21 @@ public class magpie
         System.out.println(maggie.getResponse("The weather is nice."));
         System.out.println(">Have you heard of my friend?");
         System.out.println(maggie.getResponse("Have you heard of my friend?"));
+        
+        System.out.println(maggie.findKeyword("yesterday is today's day before.", "before", 0));
 
-        maggie.findKeyword("The weather is really great today!", "great", 0);
+        String statement = "I like robots.";
+        System.out.println("Statement: " + statement);
+        System.out.println("Response: " + maggie.getResponse(statement));
+
+         statement = "I want to understand French.";
+         System.out.println("Statement: " + statement);
+         System.out.println("Response: " + maggie.getResponse(statement));
+
+         statement = "You confuse me.";
+         System.out.println("Statement: " + statement);
+         System.out.println("Response: " + maggie.getResponse(statement));
+
     }
+
 }
